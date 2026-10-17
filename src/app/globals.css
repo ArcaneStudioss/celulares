@@ -169,6 +169,16 @@ select.campo {
 .barra-enche { transform-origin: left; animation: enche 1.6s var(--ease-saida) both; animation-delay: var(--atraso, 0ms); }
 .check path { stroke-dasharray: 24; animation: risca 0.6s var(--ease-saida) both; animation-delay: var(--atraso, 0ms); }
 
+/* topo claro: celulares entram de fora da tela, se juntam e ficam flutuando */
+@keyframes cel-entra {
+  from { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--r0)) scale(0.7); }
+  to { opacity: 1; transform: rotate(var(--r1)); }
+}
+@keyframes cel-flutua { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+.hero-cel-entra { animation: cel-entra 1.7s var(--ease-saida) both; animation-delay: var(--atraso, 0ms); transform: rotate(var(--r1)); }
+.hero-cel-flutua { animation: cel-flutua var(--ciclo, 8s) ease-in-out infinite; animation-delay: var(--atraso-f, 0ms); }
+.hero-fundo { background: radial-gradient(60% 55% at 72% 45%, color-mix(in srgb, #f26a21 12%, transparent), transparent 70%), radial-gradient(45% 45% at 40% 70%, color-mix(in srgb, #7fcf9a 14%, transparent), transparent 70%), var(--fundo); }
+
 /* lista do laudo: cada item se marca quando entra na tela (narrativa: a conferencia acontecendo) */
 .item-laudo .marca { transform: scale(0.6); opacity: 0.25; transition: transform 0.5s var(--ease-saida), opacity 0.4s, background-color 0.4s; }
 .item-laudo .marca path { stroke-dasharray: 24; stroke-dashoffset: 24; transition: stroke-dashoffset 0.6s var(--ease-saida) 0.15s; }
@@ -196,6 +206,7 @@ html:not(.js) .item-laudo .marca path { stroke-dashoffset: 0; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0ms !important; transition-duration: 0.01ms !important; transition-delay: 0ms !important; scroll-behavior: auto !important; }
   .js [data-revelar] { opacity: 1; transform: none; }
+  .hero-cel-flutua { animation: none; }
   .item-laudo .marca { transform: none; opacity: 1; background: var(--acento); }
   .item-laudo .marca path { stroke-dashoffset: 0; }
 }

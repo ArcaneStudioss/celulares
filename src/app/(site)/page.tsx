@@ -7,6 +7,7 @@ import { CartaoProduto } from "@/components/site/CartaoProduto";
 import { Abas } from "@/components/site/Abas";
 import type { Produto } from "@/lib/produtos";
 import { HeroVideo } from "@/components/site/HeroVideo";
+import { HeroCelulares } from "@/components/site/HeroCelulares";
 
 export const dynamic = "force-dynamic";
 
@@ -45,8 +46,31 @@ export default async function Inicio() {
 
   return (
     <>
-      {/* 1. Topo em tela cheia: video de fundo (feito das fotos da loja ou o que o cliente enviar no painel),
-          a promessa da marca na frente e o laudo se preenchendo */}
+      {/* 1. Topo claro: celulares coloridos entram voando e se juntam; a promessa da marca ao lado.
+          Se o cliente enviar um video proprio no painel, vale o video (bloco abaixo). */}
+      {!config.videoTopo ? (
+        <section className="hero-fundo relative isolate -mt-px flex min-h-[calc(100dvh-96px)] items-center overflow-hidden">
+          <div className="mx-auto grid w-full max-w-[1240px] items-center gap-2 px-4 py-8 sm:px-6 lg:grid-cols-[1fr_1.1fr] lg:gap-8 lg:py-16">
+            <div className="order-2 lg:order-1">
+              <h1 className="entra max-w-[12ch] text-[44px] leading-[1.0] font-semibold tracking-[-0.045em] text-balance sm:text-[64px] lg:text-[84px]">
+                Você sabe exatamente o que está levando.
+              </h1>
+              <p className="entra mt-5 max-w-[34ch] text-[17px] leading-relaxed text-suave sm:text-[19px]" style={atraso(120)}>
+                iPhones novos e seminovos, com garantia de {config.garantia} e até {config.parcelasMax}x no cartão.
+              </p>
+              <div className="entra mt-7 flex flex-wrap gap-3" style={atraso(220)}>
+                <Link href="/loja?categoria=iphone" className="btn btn-escuro">
+                  Ver iPhones <ArrowRight className="size-4" />
+                </Link>
+                <a href={wpp("Oi, Loja Modelo! Vim pelo site e queria tirar uma dúvida.")} target={config.whatsapp ? "_blank" : undefined} rel="noopener noreferrer" className="btn btn-claro">
+                  Falar no WhatsApp
+                </a>
+              </div>
+            </div>
+            <HeroCelulares className="order-1 h-[46dvh] min-h-[300px] w-full lg:order-2 lg:h-[600px]" />
+          </div>
+        </section>
+      ) : (
       <section className="relative isolate -mt-px flex min-h-[calc(100dvh-96px)] items-end overflow-hidden bg-[#0b0c0d] text-white">
         <HeroVideo proprio={config.videoTopo} posterProprio={config.posterTopo} />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/50 to-black/40 lg:bg-gradient-to-r lg:from-black/85 lg:via-black/45 lg:to-black/10" aria-hidden />
@@ -69,6 +93,7 @@ export default async function Inicio() {
           </div>
         </div>
       </section>
+      )}
 
       {/* 2. Categorias: trilho no celular, grade no PC */}
       <section aria-labelledby="t-categorias" className="mt-20 lg:mt-24">
