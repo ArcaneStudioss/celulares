@@ -78,7 +78,7 @@ export default async function Inicio() {
       ) : (
         <HeroAparelhos>
           <div className="relative z-10 mx-auto w-full max-w-[1240px] px-4 pt-10 pb-14 sm:px-6 lg:pt-0 lg:pb-0">
-            <h1 className="entra max-w-[12ch] text-[44px] leading-[1.0] font-semibold tracking-[-0.045em] text-balance sm:text-[64px] lg:text-[80px]">
+            <h1 className="entra max-w-[12ch] text-[44px] max-[380px]:text-[38px] leading-[1.0] font-semibold tracking-[-0.045em] text-balance sm:text-[64px] lg:text-[80px]">
               Você sabe exatamente o que está levando.
             </h1>
             <p className="entra entra-2 mt-5 max-w-[34ch] text-[17px] leading-relaxed text-suave sm:text-[19px]">

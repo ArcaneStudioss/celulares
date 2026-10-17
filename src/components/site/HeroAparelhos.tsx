@@ -29,7 +29,7 @@ export function HeroAparelhos({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <section ref={ref} className="hero-aparelhos relative -mt-px flex min-h-[calc(100dvh-96px)] items-start overflow-hidden bg-fundo lg:items-center">
+    <section ref={ref} className="hero-aparelhos relative -mt-px flex items-start overflow-hidden bg-fundo lg:items-center">
       <div className="abertura" aria-hidden>
         <span className="abertura-selo">
           <span className="abertura-anel" />
