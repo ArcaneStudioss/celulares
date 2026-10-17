@@ -1,0 +1,46 @@
+# Loja Modelo (lojacelular.arcanestudios.io): app Next + Postgres proprio, atras do Traefik da VPS.
+# Os segredos vem do ambiente do projeto (nada de senha neste arquivo).
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: loja
+      POSTGRES_USER: loja
+      POSTGRES_PASSWORD: ${DB_SENHA:?defina DB_SENHA}
+    volumes: [loja_pg:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U loja -d loja"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      DATABASE_URL: postgres://loja:${DB_SENHA}@db:5432/loja
+      SITE_URL: https://lojacelular.arcanestudios.io
+      SESSION_SECRET: ${SESSION_SECRET:?defina SESSION_SECRET}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?defina ADMIN_EMAIL}
+      ADMIN_SENHA: ${ADMIN_SENHA:?defina ADMIN_SENHA}
+      PERMITIR_MIDIA_LOCAL: "1"
+      BACKUP_CHAVE: ${BACKUP_CHAVE:?defina BACKUP_CHAVE}
+      BACKUP_S3_ENDPOINT: ${BACKUP_S3_ENDPOINT:?defina BACKUP_S3_ENDPOINT}
+      BACKUP_S3_BUCKET: ${BACKUP_S3_BUCKET:?defina BACKUP_S3_BUCKET}
+      BACKUP_S3_REGIAO: auto
+      BACKUP_S3_CHAVE_ID: ${BACKUP_S3_CHAVE_ID:?defina BACKUP_S3_CHAVE_ID}
+      BACKUP_S3_SEGREDO: ${BACKUP_S3_SEGREDO:?defina BACKUP_S3_SEGREDO}
+    volumes: [loja_midia:/app/.dados/midia]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.lojacelular.rule=Host(`lojacelular.arcanestudios.io`)
+      - traefik.http.routers.lojacelular.entrypoints=websecure
+      - traefik.http.routers.lojacelular.tls.certresolver=letsencrypt
+      - traefik.http.services.lojacelular.loadbalancer.server.port=8080
+
+volumes:
+  loja_pg: { name: arc_lojacelular_pg }
+  loja_midia: { name: arc_lojacelular_midia }

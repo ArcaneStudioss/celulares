@@ -28,15 +28,14 @@ npm test               # 15 testes (login, estoque, pedidos, backup/restauraçã
 ```
 Login de teste local: `admin@demo.local` / `demo-teste-2026` (só existe no banco local).
 
-## Produção (Discloud, app NOVO)
-1. Supabase: criar projeto (banco Postgres) e um bucket **público** `loja-modelo` no Storage (fotos e vídeo).
-2. Cloudflare R2 (ou Backblaze B2): bucket privado para o backup, chave só com escrita/leitura nesse bucket.
-3. `.env.production.local` a partir de `.env.example` (nunca vai pro git).
-4. `npm run empacotar` → `loja-modelo-discloud.zip` → subir como app novo na Discloud.
-5. Primeiro acesso: `ADMIN_EMAIL`/`ADMIN_SENHA` criam o primeiro admin quando o banco não tem ninguém; depois troque a senha em Equipe → Minha senha.
-6. Depois do deploy: `auditar-site.sh https://... --app` (kit de segurança da Arcane).
+## Produção (VPS Hostinger, Docker + Traefik)
+Endereço: `lojacelular.arcanestudios.io` (DNS na Cloudflare, registro A para a VPS com proxy ligado).
+`docker-compose.yml` sobe o app (`Dockerfile`) e um Postgres 17 próprio; fotos e vídeo ficam num volume (`PERMITIR_MIDIA_LOCAL`).
+Variáveis (nunca no git): `DB_SENHA`, `SESSION_SECRET` (`openssl rand -base64 48`), `ADMIN_EMAIL`, `ADMIN_SENHA` (cria o primeiro admin; troque em Equipe), `BACKUP_CHAVE`, `BACKUP_S3_ENDPOINT`, `BACKUP_S3_BUCKET`, `BACKUP_S3_CHAVE_ID`, `BACKUP_S3_SEGREDO`.
+Depois do deploy: `auditar-site.sh https://lojacelular.arcanestudios.io --app`.
+A Discloud não é mais usada (`discloud.config` e `npm run empacotar` são históricos).
 
-Cache da hospedagem: `/_next/static` já vem com nome versionado. Se trocar arquivo em `public/` (logo, fotos fixas), **mude o nome do arquivo**: a Cloudflare guarda por até 4 h.
+Cache: `/_next/static` já vem com nome versionado. Se trocar arquivo em `public/` (logo, fotos fixas), **mude o nome do arquivo**: a Cloudflare guarda por até 4 h.
 
 ## Backup (tipo C, `playbooks/backup.md`)
 - Diário automático (`src/instrumentation.ts`): banco inteiro em JSON → gzip → AES-256-GCM → R2/B2, conferido lendo de volta. Retenção pelo nome: 7 diários, 4 semanais, 12 mensais.
