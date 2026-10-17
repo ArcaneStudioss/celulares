@@ -7,6 +7,7 @@ import { CartaoProduto } from "@/components/site/CartaoProduto";
 import { Abas } from "@/components/site/Abas";
 import type { Produto } from "@/lib/produtos";
 import { HeroVideo } from "@/components/site/HeroVideo";
+import { HeroAparelhos } from "@/components/site/HeroAparelhos";
 
 export const dynamic = "force-dynamic";
 
@@ -45,30 +46,55 @@ export default async function Inicio() {
 
   return (
     <>
-      {/* 1. Topo em tela cheia: video de fundo (feito das fotos da loja ou o que o cliente enviar no painel),
-          a promessa da marca na frente e o laudo se preenchendo */}
-      <section className="relative isolate -mt-px flex min-h-[calc(100dvh-96px)] items-end overflow-hidden bg-[#0b0c0d] text-white">
-        <HeroVideo proprio={config.videoTopo} posterProprio={config.posterTopo} />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/50 to-black/40 lg:bg-gradient-to-r lg:from-black/85 lg:via-black/45 lg:to-black/10" aria-hidden />
-        <div className="relative mx-auto flex w-full max-w-[1240px] flex-col px-4 pt-24 pb-14 sm:px-6 lg:pb-20">
-          <div>
-            <h1 className="entra max-w-[12ch] text-[44px] leading-[1.0] font-semibold tracking-[-0.045em] text-balance sm:text-[64px] lg:text-[84px]">
+      {/* 1. Topo. Sem vídeo enviado pela loja: abertura com selo e aparelhos que se juntam ao lado do título
+          (HeroAparelhos). Com vídeo próprio no painel: o topo em tela cheia com o vídeo de fundo. */}
+      {config.videoTopo ? (
+        <>
+        {/* 1. Topo em tela cheia: video de fundo (feito das fotos da loja ou o que o cliente enviar no painel),
+            a promessa da marca na frente e o laudo se preenchendo */}
+        <section className="relative isolate -mt-px flex min-h-[calc(100dvh-96px)] items-end overflow-hidden bg-[#0b0c0d] text-white">
+          <HeroVideo proprio={config.videoTopo} posterProprio={config.posterTopo} />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/50 to-black/40 lg:bg-gradient-to-r lg:from-black/85 lg:via-black/45 lg:to-black/10" aria-hidden />
+          <div className="relative mx-auto flex w-full max-w-[1240px] flex-col px-4 pt-24 pb-14 sm:px-6 lg:pb-20">
+            <div>
+              <h1 className="entra max-w-[12ch] text-[44px] leading-[1.0] font-semibold tracking-[-0.045em] text-balance sm:text-[64px] lg:text-[84px]">
+                Você sabe exatamente o que está levando.
+              </h1>
+              <p className="entra mt-5 max-w-[34ch] text-[17px] leading-relaxed text-white/80 sm:text-[19px]" style={atraso(120)}>
+                iPhones novos e seminovos, com garantia de {config.garantia} e até {config.parcelasMax}x no cartão.
+              </p>
+              <div className="entra mt-7 flex flex-wrap gap-3" style={atraso(220)}>
+                <Link href="/loja?categoria=iphone" className="btn bg-white text-[#0b0c0d]">
+                  Ver iPhones <ArrowRight className="size-4" />
+                </Link>
+                <a href={wpp("Oi, Loja Modelo! Vim pelo site e queria tirar uma dúvida.")} target={config.whatsapp ? "_blank" : undefined} rel="noopener noreferrer" className="btn bg-white/12 text-white ring-1 ring-white/30 backdrop-blur-md">
+                  Falar no WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+        </>
+      ) : (
+        <HeroAparelhos>
+          <div className="relative z-10 mx-auto w-full max-w-[1240px] px-4 pt-10 pb-14 sm:px-6 lg:pt-0 lg:pb-0">
+            <h1 className="entra max-w-[12ch] text-[44px] leading-[1.0] font-semibold tracking-[-0.045em] text-balance sm:text-[64px] lg:text-[80px]">
               Você sabe exatamente o que está levando.
             </h1>
-            <p className="entra mt-5 max-w-[34ch] text-[17px] leading-relaxed text-white/80 sm:text-[19px]" style={atraso(120)}>
+            <p className="entra entra-2 mt-5 max-w-[34ch] text-[17px] leading-relaxed text-suave sm:text-[19px]">
               iPhones novos e seminovos, com garantia de {config.garantia} e até {config.parcelasMax}x no cartão.
             </p>
-            <div className="entra mt-7 flex flex-wrap gap-3" style={atraso(220)}>
-              <Link href="/loja?categoria=iphone" className="btn bg-white text-[#0b0c0d]">
+            <div className="entra entra-3 mt-7 flex flex-wrap gap-3">
+              <Link href="/loja?categoria=iphone" className="btn btn-escuro">
                 Ver iPhones <ArrowRight className="size-4" />
               </Link>
-              <a href={wpp("Oi, Loja Modelo! Vim pelo site e queria tirar uma dúvida.")} target={config.whatsapp ? "_blank" : undefined} rel="noopener noreferrer" className="btn bg-white/12 text-white ring-1 ring-white/30 backdrop-blur-md">
+              <a href={wpp("Oi, Loja Modelo! Vim pelo site e queria tirar uma dúvida.")} target={config.whatsapp ? "_blank" : undefined} rel="noopener noreferrer" className="btn btn-claro">
                 Falar no WhatsApp
               </a>
             </div>
           </div>
-        </div>
-      </section>
+        </HeroAparelhos>
+      )}
 
       {/* 2. Categorias: trilho no celular, grade no PC */}
       <section aria-labelledby="t-categorias" className="mt-20 lg:mt-24">
